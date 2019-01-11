@@ -45,6 +45,7 @@ class ParallelEnvironments:
         for action, parent in zip(actions, self.parents):
             parent.send(('step', action))
         results = [parent.recv() for parent in self.parents]
+        print(len(results[0]))
         # for result in results:
         #     print(result[0].shape)
         return results
