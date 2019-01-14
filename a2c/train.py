@@ -9,7 +9,8 @@ from a2c.storage import Storage
 
 
 class Trainer:
-    def __init__(self):
+    def __init__(self, steps_per_update):
+        self.steps_per_update = steps_per_update
         self.num_of_processes = multiprocessing.cpu_count()
         self.parallel_environments = ParallelEnvironments(number_of_processes=self.num_of_processes)
         self.actor_critic = ActorCritic(params.stack_size, get_action_space())
@@ -26,11 +27,25 @@ class Trainer:
         print(self.current_observations.size())
 
         for update in range(1): #range(int(num_of_updates)):
-            probs, log_probs, value = self.actor_critic(self.current_observations)
-            actions = get_actions(probs)
-            states, rewards, dones = self.parallel_environments.step(actions)
+            for step in range(self.steps_per_update):
+                probs, log_probs, value = self.actor_critic(self.current_observations)
+                actions = get_actions(probs)
+                action_log_probs, entropies = self.compute_action_logs_and_entropies(probs, log_probs)
+
+                states, rewards, dones = self.parallel_environments.step(actions)
+                self.current_observations = states
+
+    def compute_action_logs_and_entropies(self, probs, log_probs):
+        values, indices = probs.max(1)
+        indices = indices.view(-1, 1)
+        action_log_probs = log_probs.gather(1, indices)
+
+        print(probs.size())
+        print(log_probs.size())
+
+        return action_log_probs, entropies
 
 
 if __name__ == '__main__':
-    trainer = Trainer()
+    trainer = Trainer(params.steps_per_update)
     trainer.run()
