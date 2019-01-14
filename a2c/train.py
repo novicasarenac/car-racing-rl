@@ -33,15 +33,18 @@ class Trainer:
                 action_log_probs, entropies = self.compute_action_logs_and_entropies(probs, log_probs)
 
                 states, rewards, dones = self.parallel_environments.step(actions)
+                rewards = rewards.view(-1, 1)
                 self.current_observations = states
+                self.storage.add(step, value, rewards, action_log_probs, entropies)
+            expected_rewards = self.storage.compute_expected_rewards()
+            # advantages = 
 
     def compute_action_logs_and_entropies(self, probs, log_probs):
         values, indices = probs.max(1)
         indices = indices.view(-1, 1)
         action_log_probs = log_probs.gather(1, indices)
 
-        print(probs.size())
-        print(log_probs.size())
+        entropies = -(log_probs * probs).sum(-1)
 
         return action_log_probs, entropies
 
