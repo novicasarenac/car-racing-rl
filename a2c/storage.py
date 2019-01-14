@@ -27,5 +27,12 @@ class Storage:
         self.action_log_probs[step] = action_log_probs
         self.entropies[step] = entropies
 
-    def compute_expected_rewards(self):
-        # TODO
+    def compute_expected_rewards(self, last_values, discount_factor):
+        expected_rewards = torch.zeros(self.steps_per_update + 1,
+                                       self.num_of_processes,
+                                       1)
+        expected_rewards[-1] = last_values
+        for step in reversed(range(self.rewards.size(0))):
+            expected_rewards[step] = self.rewards[step] + \
+                                     expected_rewards[step + 1] * discount_factor
+        return expected_rewards[:-1]

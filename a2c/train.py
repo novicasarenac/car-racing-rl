@@ -1,5 +1,6 @@
 import multiprocessing
 import torch
+import torch.nn as nn
 from torch.optim import Adam
 from a2c.utils import params
 from a2c.parallel_environments import ParallelEnvironments
@@ -26,7 +27,7 @@ class Trainer:
 
         print(self.current_observations.size())
 
-        for update in range(1): #range(int(num_of_updates)):
+        for update in range(10): #range(int(num_of_updates)):
             for step in range(self.steps_per_update):
                 probs, log_probs, value = self.actor_critic(self.current_observations)
                 actions = get_actions(probs)
@@ -36,8 +37,21 @@ class Trainer:
                 rewards = rewards.view(-1, 1)
                 self.current_observations = states
                 self.storage.add(step, value, rewards, action_log_probs, entropies)
-            expected_rewards = self.storage.compute_expected_rewards()
-            # advantages = 
+
+            _, _, last_values = self.actor_critic(self.current_observations)
+            expected_rewards = self.storage.compute_expected_rewards(last_values,
+                                                                     params.discount_factor)
+            advantages = torch.tensor(expected_rewards) - self.storage.values
+            value_loss = advantages.pow(2).mean()
+
+            policy_loss = -(advantages * self.storage.action_log_probs).mean()
+
+            self.optimizer.zero_grad()
+            loss = policy_loss - params.entropy_coef * self.storage.entropies.mean() + \
+                params.value_loss_coef * value_loss
+            loss.backward()
+            nn.utils.clip_grad_norm(self.actor_critic.parameters(), params.max_norm)
+            self.optimizer.step()
 
     def compute_action_logs_and_entropies(self, probs, log_probs):
         values, indices = probs.max(1)
