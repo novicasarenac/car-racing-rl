@@ -49,7 +49,7 @@ class Trainer:
             self.optimizer.zero_grad()
             loss = policy_loss - params.entropy_coef * self.storage.entropies.mean() + \
                 params.value_loss_coef * value_loss
-            loss.backward()
+            loss.backward(retain_graph=True)
             nn.utils.clip_grad_norm(self.actor_critic.parameters(), params.max_norm)
             self.optimizer.step()
 
