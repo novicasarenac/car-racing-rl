@@ -27,7 +27,7 @@ class Trainer:
 
         print(self.current_observations.size())
 
-        for update in range(10): #range(int(num_of_updates)):
+        for update in range(1000): #range(int(num_of_updates)):
             for step in range(self.steps_per_update):
                 probs, log_probs, value = self.actor_critic(self.current_observations)
                 actions = get_actions(probs)
@@ -35,8 +35,9 @@ class Trainer:
 
                 states, rewards, dones = self.parallel_environments.step(actions)
                 rewards = rewards.view(-1, 1)
+                dones = dones.view(-1, 1)
                 self.current_observations = states
-                self.storage.add(step, value, rewards, action_log_probs, entropies)
+                self.storage.add(step, value, rewards, action_log_probs, entropies, dones)
 
             _, _, last_values = self.actor_critic(self.current_observations)
             expected_rewards = self.storage.compute_expected_rewards(last_values,

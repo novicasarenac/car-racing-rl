@@ -15,6 +15,8 @@ def worker(connection):
         command, data = connection.recv()
         if command == 'step':
             state, reward, done = env.step(data)
+            if done:
+                state = env.reset()
             connection.send((state, reward, done))
         elif command == 'reset':
             state = env.reset()
