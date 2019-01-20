@@ -2,3 +2,5 @@
 .vscode
 **/*.pyc
 imgs/*
+models/*
+!models/.gitkeep

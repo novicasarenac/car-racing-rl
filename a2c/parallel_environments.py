@@ -3,13 +3,12 @@ import gym
 import torch
 
 from a2c.image_utils import save
-from a2c.utils import params
 from multiprocessing import Process, Pipe
 from a2c.environment_wrapper import EnvironmentWrapper
 
 
-def worker(connection):
-    env = make_environment()
+def worker(connection, stack_size):
+    env = make_environment(stack_size)
 
     while True:
         command, data = connection.recv()
@@ -23,21 +22,22 @@ def worker(connection):
             connection.send(state)
 
 
-def make_environment():
+def make_environment(stack_size):
     env = gym.make('CarRacing-v0')
-    env_wrapper = EnvironmentWrapper(env, params.stack_size)
+    env_wrapper = EnvironmentWrapper(env, stack_size)
     return env_wrapper
 
 
 class ParallelEnvironments:
-    def __init__(self, number_of_processes=multiprocessing.cpu_count()):
+    def __init__(self, stack_size, number_of_processes=multiprocessing.cpu_count()):
         self.number_of_processes = number_of_processes
+        self.stack_size = stack_size
 
         # pairs of connections in duplex connection
         self.parents, self.childs = zip(*[Pipe() for _
                                           in range(number_of_processes)])
 
-        self.processes = [Process(target=worker, args=(child,), daemon=True)
+        self.processes = [Process(target=worker, args=(child, self.stack_size,), daemon=True)
                           for child in self.childs]
 
         for process in self.processes:
@@ -57,11 +57,11 @@ class ParallelEnvironments:
         return torch.Tensor(results)
 
     def get_state_shape(self):
-        return (params.stack_size, 84, 84)
+        return (self.stack_size, 84, 84)
 
 
 if __name__ == '__main__':
-    env = ParallelEnvironments(number_of_processes=2)
+    env = ParallelEnvironments(params.stack_size, number_of_processes=2)
     random_env = gym.make('CarRacing-v0')
     res = env.reset()
     for i in range(1000):
@@ -69,7 +69,7 @@ if __name__ == '__main__':
         actions = [ac, ac]
         results = env.step(actions)
 
-        if torch.all(torch.eq(torch.Tensor(results[0][0]), torch.Tensor(results[1][0]))):
+        if torch.all(torch.eq(torch.Tensor(results[0][0][0]), torch.Tensor(results[0][1][0]))):
             print(i)
     # actions = [[0, 0, 0], [0, 0, 0]]
     # env.step(actions)
