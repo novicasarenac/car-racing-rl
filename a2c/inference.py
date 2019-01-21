@@ -15,9 +15,9 @@ def a2c_inference(params, path):
 
     state = env_wrapper.reset()
     state = torch.Tensor([state])
-    terminal = False
+    done = False
     total_score = 0
-    while not terminal:
+    while not done:
         probs, _, _ = model(state)
         action = get_actions(probs)
         print(action)
