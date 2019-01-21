@@ -1,6 +1,7 @@
 import argparse
 from a2c.train import A2CTrainer
 from params import Params
+from a2c.inference import a2c_inference
 
 
 def get_trainer(model_type, params):
@@ -17,8 +18,11 @@ def run_training(model_type):
 
 
 def run_inference(model_type):
-    print('inference')
-    print(model_type)
+    params = Params('params/' + model_type + '.json')
+    if model_type == 'a2c':
+        score = a2c_inference(params, 'models/a2c.pt')
+
+    print('Total score: {}'.format(score))
 
 
 if __name__ == '__main__':
