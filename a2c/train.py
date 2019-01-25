@@ -1,7 +1,6 @@
 import multiprocessing
 import torch
 import torch.nn as nn
-import psutil
 from torch.optim import Adam
 from a2c.parallel_environments import ParallelEnvironments
 from a2c.actor_critic import ActorCritic
