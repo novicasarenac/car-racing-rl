@@ -1,6 +1,7 @@
 import multiprocessing
 import torch
 import torch.nn as nn
+import psutil
 from torch.optim import Adam
 from a2c.parallel_environments import ParallelEnvironments
 from a2c.actor_critic import ActorCritic
@@ -28,8 +29,9 @@ class A2CTrainer:
 
         print(self.current_observations.size())
 
-        for update in range(1000): #range(int(num_of_updates)):
+        for update in range(int(num_of_updates)):
             print(update)
+            self.storage.reset_storage()
             for step in range(self.params.steps_per_update):
                 probs, log_probs, value = self.actor_critic(self.current_observations)
                 actions = get_actions(probs)
@@ -46,7 +48,6 @@ class A2CTrainer:
                                                                      self.params.discount_factor)
             advantages = torch.tensor(expected_rewards) - self.storage.values
             value_loss = advantages.pow(2).mean()
-
             policy_loss = -(advantages * self.storage.action_log_probs).mean()
 
             self.optimizer.zero_grad()
