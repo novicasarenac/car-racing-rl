@@ -29,7 +29,6 @@ class A2CTrainer:
         print(self.current_observations.size())
 
         for update in range(int(num_of_updates)):
-            print(update)
             self.storage.reset_storage()
             for step in range(self.params.steps_per_update):
                 probs, log_probs, value = self.actor_critic(self.current_observations)
@@ -58,6 +57,9 @@ class A2CTrainer:
 
             if update % 300 == 0:
                 torch.save(self.actor_critic.state_dict(), self.model_path)
+
+            if update % 100 == 0:
+                print('Update: {}. Loss: {}'.format(update, loss))
 
     def compute_action_logs_and_entropies(self, probs, log_probs):
         values, indices = probs.max(1)
