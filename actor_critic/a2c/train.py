@@ -2,10 +2,10 @@ import multiprocessing
 import torch
 import torch.nn as nn
 from torch.optim import Adam
-from a2c.parallel_environments import ParallelEnvironments
-from a2c.actor_critic import ActorCritic
-from a2c.actions import get_action_space, get_actions
-from a2c.storage import Storage
+from actor_critic.a2c.parallel_environments import ParallelEnvironments
+from actor_critic.actor_critic import ActorCritic
+from actor_critic.a2c.actions import get_action_space, get_actions
+from actor_critic.a2c.storage import Storage
 
 
 class A2CTrainer:

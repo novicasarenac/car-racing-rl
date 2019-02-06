@@ -2,9 +2,9 @@ import multiprocessing
 import gym
 import torch
 
-from utils.image_utils import save
+from actor_critic.image_utils import save
 from multiprocessing import Process, Pipe
-from utils.environment_wrapper import EnvironmentWrapper
+from actor_critic.environment_wrapper import EnvironmentWrapper
 
 
 def worker(connection, stack_size):

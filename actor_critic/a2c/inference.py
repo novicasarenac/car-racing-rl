@@ -1,8 +1,8 @@
 import gym
 import torch
-from a2c.actor_critic import ActorCritic
-from a2c.actions import get_action_space, get_actions
-from utils.environment_wrapper import EnvironmentWrapper
+from actor_critic.actor_critic import ActorCritic
+from actor_critic.a2c.actions import get_action_space, get_actions
+from actor_critic.environment_wrapper import EnvironmentWrapper
 
 
 def a2c_inference(params, path):

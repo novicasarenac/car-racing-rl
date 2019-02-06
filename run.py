@@ -1,14 +1,17 @@
 import argparse
-from a2c.train import A2CTrainer
+from actor_critic.a2c.train import A2CTrainer
+from actor_critic.a3c.train import A3CTrainer
 from params import Params
-from a2c.inference import a2c_inference
-from a2c.evaluate import evaluate_a2c
+from actor_critic.a2c.inference import a2c_inference
+from actor_critic.a2c.evaluate import evaluate_a2c
 
 
 def get_trainer(model_type, params):
     model_path = 'models/' + model_type + '.pt'
     if model_type == 'a2c':
         return A2CTrainer(params, model_path)
+    elif model_type == 'a3c':
+        return A3CTrainer(params, model_path)
     return None
 
 

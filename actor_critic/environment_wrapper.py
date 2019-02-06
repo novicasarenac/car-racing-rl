@@ -2,7 +2,7 @@ import gym
 import numpy as np
 from PIL import Image
 from collections import deque
-from utils.image_utils import to_grayscale, zero_center, crop
+from actor_critic.image_utils import to_grayscale, zero_center, crop
 
 
 class EnvironmentWrapper(gym.Wrapper):
