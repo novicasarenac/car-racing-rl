@@ -2,9 +2,9 @@ import multiprocessing
 import gym
 import torch
 
-from a2c.image_utils import save
+from utils.image_utils import save
 from multiprocessing import Process, Pipe
-from a2c.environment_wrapper import EnvironmentWrapper
+from utils.environment_wrapper import EnvironmentWrapper
 
 
 def worker(connection, stack_size):
