@@ -1,6 +1,6 @@
 import torch.multiprocessing as mp
 from actor_critic.actor_critic import ActorCritic
-from actor_critic.a2c.actions import get_action_space
+from actor_critic.actions import get_action_space
 from actor_critic.a3c.worker import Worker
 
 

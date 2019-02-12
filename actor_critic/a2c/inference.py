@@ -1,7 +1,7 @@
 import gym
 import torch
 from actor_critic.actor_critic import ActorCritic
-from actor_critic.a2c.actions import get_action_space, get_actions
+from actor_critic.actions import get_action_space, get_actions
 from actor_critic.environment_wrapper import EnvironmentWrapper
 
 

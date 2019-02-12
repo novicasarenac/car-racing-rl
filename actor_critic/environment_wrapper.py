@@ -34,6 +34,9 @@ class EnvironmentWrapper(gym.Wrapper):
         preprocessed_state = crop(preprocessed_state)
         return preprocessed_state
 
+    def get_state_shape(self):
+        return (self.stack_size, 84, 84)
+
 
 if __name__ == '__main__':
     env = gym.make('CarRacing-v0')

@@ -4,7 +4,7 @@ import torch.nn as nn
 from torch.optim import Adam
 from actor_critic.a2c.parallel_environments import ParallelEnvironments
 from actor_critic.actor_critic import ActorCritic
-from actor_critic.a2c.actions import get_action_space, get_actions
+from actor_critic.actions import get_action_space, get_actions
 from actor_critic.a2c.storage import Storage
 
 
