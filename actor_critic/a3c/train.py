@@ -1,3 +1,4 @@
+import torch
 import torch.multiprocessing as mp
 from actor_critic.actor_critic import ActorCritic
 from actor_critic.actions import get_action_space
@@ -22,3 +23,5 @@ class A3CTrainer:
 
         for process in processes:
             process.join()
+
+        torch.save(self.global_model.state_dict(), self.model_path)

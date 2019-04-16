@@ -1,10 +1,10 @@
 {
     "stack_size": 5,
     "lr": 0.0001,
-    "steps_per_update": 5,
-    "num_of_steps": 125000,
+    "steps_per_update": 60,
+    "num_of_steps": 200000,
     "discount_factor": 0.99,
-    "entropy_coef": 0.1,
+    "entropy_coef": 0.01,
     "max_norm": 0.5,
     "value_loss_coef": 0.5
 }

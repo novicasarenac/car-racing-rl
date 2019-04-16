@@ -2,8 +2,8 @@ import argparse
 from actor_critic.a2c.train import A2CTrainer
 from actor_critic.a3c.train import A3CTrainer
 from params import Params
-from actor_critic.a2c.inference import a2c_inference
-from actor_critic.a2c.evaluate import evaluate_a2c
+from actor_critic.inference import inference
+from actor_critic.evaluate import evaluate
 
 
 def get_trainer(model_type, params):
@@ -23,17 +23,14 @@ def run_training(model_type):
 
 def run_inference(model_type):
     params = Params('params/' + model_type + '.json')
-    if model_type == 'a2c':
-        score = a2c_inference(params, 'models/a2c.pt')
+    score = inference(params, 'models/' + model_type + '.pt')
 
     print('Total score: {0:.2f}'.format(score))
 
 
 def run_evaluation(model_type):
-    print('evaluating')
     params = Params('params/' + model_type + '.json')
-    if model_type == 'a2c':
-        score = evaluate_a2c(params, 'models/a2c.pt')
+    score = evaluate(params, 'models/' + model_type + '.pt')
 
     print('Average reward after 100 episodes: {0:.2f}'.format(score))
 

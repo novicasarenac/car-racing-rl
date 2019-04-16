@@ -5,7 +5,7 @@ from actor_critic.actions import get_action_space, get_actions
 from actor_critic.environment_wrapper import EnvironmentWrapper
 
 
-def evaluate_a2c(params, path):
+def evaluate(params, path):
     model = ActorCritic(params.stack_size, get_action_space())
     model.load_state_dict(torch.load(path))
     model.eval()
