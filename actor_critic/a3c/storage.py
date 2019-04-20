@@ -28,3 +28,12 @@ class Storage:
             expected_reward[step] = self.rewards[step] + \
                                     expected_reward[step + 1] * discount_factor * (1.0 - self.dones[step])
         return expected_reward[:-1]
+
+    def compute_gae(self, last_value, discount_factor, gae_coef):
+        gae = torch.zeros(self.steps_per_update + 1, 1)
+        next_value = last_value
+        for step in reversed(range(self.rewards.size(0))):
+            delta = self.rewards[step] + discount_factor * next_value - self.values[step]
+            gae[step] = gae[step + 1] * discount_factor * gae_coef + delta
+            next_value = self.values[step]
+        return gae[:-1]

@@ -48,7 +48,13 @@ class Worker(mp.Process):
                                                                    self.params.discount_factor)
             advantages = torch.tensor(expected_reward) - self.storage.values
             value_loss = advantages.pow(2).mean()
-            policy_loss = -(advantages * self.storage.action_log_probs).mean()
+            if self.params.use_gae:
+                gae = self.storage.compute_gae(last_value,
+                                               self.params.discount_factor,
+                                               self.params.gae_coef)
+                policy_loss = -(torch.tensor(gae) * self.storage.action_log_probs).mean()
+            else:
+                policy_loss = -(advantages * self.storage.action_log_probs).mean()
 
             self.optimizer.zero_grad()
             loss = policy_loss - self.params.entropy_coef * self.storage.entropies.mean() + \
