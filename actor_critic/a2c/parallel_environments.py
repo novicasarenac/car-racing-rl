@@ -2,7 +2,6 @@ import multiprocessing
 import gym
 import torch
 
-from actor_critic.image_utils import save
 from multiprocessing import Process, Pipe
 from actor_critic.environment_wrapper import EnvironmentWrapper
 
