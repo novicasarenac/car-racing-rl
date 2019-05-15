@@ -1,5 +1,7 @@
 {
     "skip_steps": 4,
     "memory_capacity": 10000,
-    "batch_size": 128
+    "batch_size": 128,
+    "target_update_freq": 10000,
+    "num_of_steps": 150000
 }

@@ -1,6 +1,7 @@
 import argparse
 from actor_critic.a2c.train import A2CTrainer
 from actor_critic.a3c.train import A3CTrainer
+from dqn.train import DQNTrainer
 from params import Params
 from actor_critic.inference import inference
 from actor_critic.evaluate import evaluate
@@ -12,6 +13,8 @@ def get_trainer(model_type, params):
         return A2CTrainer(params, model_path)
     elif model_type == 'a3c':
         return A3CTrainer(params, model_path)
+    elif model_type == 'dqn':
+        return DQNTrainer(params, model_path)
     return None
 
 
