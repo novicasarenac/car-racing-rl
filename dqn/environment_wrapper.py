@@ -10,7 +10,7 @@ class EnvironmentWrapper(gym.Wrapper):
     def reset(self):
         state = self.env.reset()
         preprocessed_state = self.preprocess(state)
-        return preprocessed_state
+        return [preprocessed_state]
 
     def step(self, action):
         total_reward = 0
@@ -21,7 +21,7 @@ class EnvironmentWrapper(gym.Wrapper):
             if done:
                 break
         preprocessed_state = self.preprocess(state)
-        return preprocessed_state, total_reward, done
+        return [preprocessed_state], total_reward, done
 
     def preprocess(self, state):
         preprocessed_state = to_grayscale(state)
