@@ -3,5 +3,6 @@
     "memory_capacity": 10000,
     "batch_size": 128,
     "target_update_freq": 10000,
-    "num_of_steps": 150000
+    "num_of_steps": 150000,
+    "discount_factor": 0.999
 }
