@@ -33,12 +33,13 @@ class DQNTrainer:
             self.replay_memory.add(state, action_index, reward, next_state, done)
             state = next_state
             if done:
-                state = torch.Tensor([self.environment.reset()])
+                state = torch.Tensor(self.environment.reset())
             if len(self.replay_memory.memory) > self.params.batch_size:
                 loss = self._update_current_q_net()
                 print('Update: {}. Loss: {}'.format(step, loss))
             if step % 100 == 0:
                 self._update_target_q_net()
+        torch.save(self.target_q_net.state_dict(), self.model_path)
 
     def _update_current_q_net(self):
         batch = self.replay_memory.sample(self.params.batch_size)
