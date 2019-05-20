@@ -21,6 +21,7 @@ class DQNTrainer:
 
     def run(self):
         state = torch.Tensor(self.environment.reset())
+        self._update_target_q_net()
         for step in range(int(self.params.num_of_steps)):
             q_value = self.current_q_net(torch.stack([state]))
             action_index, action = get_action(q_value,
@@ -36,6 +37,8 @@ class DQNTrainer:
             if len(self.replay_memory.memory) > self.params.batch_size:
                 loss = self._update_current_q_net()
                 print('Update: {}. Loss: {}'.format(step, loss))
+            if step % 100 == 0:
+                self._update_target_q_net()
 
     def _update_current_q_net(self):
         batch = self.replay_memory.sample(self.params.batch_size)
@@ -56,3 +59,6 @@ class DQNTrainer:
         loss.backward()
         self.optimizer.step()
         return loss
+
+    def _update_target_q_net(self):
+        self.target_q_net.load_state_dict(self.current_q_net.state_dict())
