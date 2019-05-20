@@ -1,4 +1,6 @@
+import math
 import torch
+import random
 
 
 LEFT = [-1.0, 0.0, 0.0]
@@ -13,7 +15,14 @@ def get_action_space():
     return len(ACTIONS)
 
 
-def get_action(q_value):
+def get_action(q_value, train=False, step=None, params=None):
+    if train:
+        epsilon = params.epsilon_final + (params.epsilon_start - params.epsilon_final) * \
+            math.exp(-1 * step / params.epsilon_step)
+        if random.random() <= epsilon:
+            action_index = random.randrange(get_action_space())
+            action = ACTIONS[action_index]
+            return torch.LongTensor([action_index])[0], action
     action_index = q_value.max(1)[1]
     action = ACTIONS[action_index[0]]
     return action_index[0], action

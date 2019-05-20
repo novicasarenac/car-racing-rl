@@ -23,7 +23,10 @@ class DQNTrainer:
         state = torch.Tensor(self.environment.reset())
         for step in range(int(self.params.num_of_steps)):
             q_value = self.current_q_net(torch.stack([state]))
-            action_index, action = get_action(q_value)
+            action_index, action = get_action(q_value,
+                                              train=True,
+                                              step=step,
+                                              params=self.params)
             next_state, reward, done = self.environment.step(action)
             next_state = torch.Tensor(next_state)
             self.replay_memory.add(state, action_index, reward, next_state, done)
