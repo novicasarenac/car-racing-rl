@@ -3,8 +3,10 @@ from actor_critic.a2c.train import A2CTrainer
 from actor_critic.a3c.train import A3CTrainer
 from dqn.train import DQNTrainer
 from params import Params
-from actor_critic.inference import inference
-from actor_critic.evaluate import evaluate
+from actor_critic.inference import actor_critic_inference
+from dqn.inference import dqn_inference
+from actor_critic.evaluate import evaluate_actor_critic
+from dqn.evaluate import evaluate_dqn
 
 
 def get_trainer(model_type, params):
@@ -26,14 +28,20 @@ def run_training(model_type):
 
 def run_inference(model_type):
     params = Params('params/' + model_type + '.json')
-    score = inference(params, 'models/' + model_type + '.pt')
+    if model_type == 'dqn':
+        score = dqn_inference('models/' + model_type + '.pt')
+    else:
+        score = actor_critic_inference(params, 'models/' + model_type + '.pt')
 
     print('Total score: {0:.2f}'.format(score))
 
 
 def run_evaluation(model_type):
     params = Params('params/' + model_type + '.json')
-    score = evaluate(params, 'models/' + model_type + '.pt')
+    if model_type == 'dqn':
+        score = evaluate_dqn('models/' + model_type + '.pt')
+    else:
+        score = evaluate_actor_critic(params, 'models/' + model_type + '.pt')
 
     print('Average reward after 100 episodes: {0:.2f}'.format(score))
 

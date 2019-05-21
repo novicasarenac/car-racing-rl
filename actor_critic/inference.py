@@ -5,7 +5,7 @@ from actor_critic.actions import get_action_space, get_actions
 from actor_critic.environment_wrapper import EnvironmentWrapper
 
 
-def inference(params, path):
+def actor_critic_inference(params, path):
     model = ActorCritic(params.stack_size, get_action_space())
     model.load_state_dict(torch.load(path))
     model.eval()
