@@ -47,7 +47,7 @@ class DQNTrainer:
             if len(self.replay_memory.memory) > self.params.batch_size:
                 loss = self._update_current_q_net()
                 print('Update: {}. Loss: {}'.format(step, loss))
-            if step % 100 == 0:
+            if step % self.params.target_update_freq == 0:
                 self._update_target_q_net()
         torch.save(self.target_q_net.state_dict(), self.model_path)
 
