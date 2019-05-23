@@ -17,7 +17,8 @@ class DQNTrainer:
         self.current_q_net.to(self.device)
         self.target_q_net = DQN(input_shape=1, num_of_actions=get_action_space())
         self.target_q_net.to(self.device)
-        self.optimizer = RMSprop(self.current_q_net.parameters())
+        self.optimizer = RMSprop(self.current_q_net.parameters(),
+                                 lr=self.params.lr)
         self.replay_memory = ReplayMemory(self.params.memory_capacity)
         env = gym.make('CarRacing-v0')
         self.environment = EnvironmentWrapper(env, self.params.skip_steps)

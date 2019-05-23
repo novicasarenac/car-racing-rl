@@ -1,11 +1,12 @@
 {
     "skip_steps": 4,
     "memory_capacity": 10000,
-    "batch_size": 128,
+    "batch_size": 32,
     "target_update_freq": 10000,
     "num_of_steps": 150000,
     "discount_factor": 0.999,
     "epsilon_start": 0.9,
     "epsilon_final": 0.05,
-    "epsilon_step": 200
+    "epsilon_step": 30000,
+    "lr": 0.00001
 }
